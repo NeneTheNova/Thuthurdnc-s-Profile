@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thuthurdcn | Server Creator & QA</title>
+<link id="fav" rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='12' fill='%2338bdf8'/%3E%3C/svg%3E">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--a:#38bdf8;--ar:56,189,248;--s:#818cf8}
+body{background:#06090e;color:#e2e8f0;font-family:'Plus Jakarta Sans',sans-serif;overflow-x:hidden}
+.acc{color:var(--a)}.sec{color:var(--s)}.accbg{background:var(--a)}
+.glass{background:rgba(10,14,22,.32);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.08)}
+.card{background:rgba(15,22,35,.28);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);border:1px solid rgba(var(--ar),.15);border-radius:1rem;transition:all .3s}
+.card:hover{border-color:rgba(var(--ar),.4);transform:translateY(-2px);box-shadow:0 12px 28px -8px rgba(var(--ar),.2)}
+.card.slide{transform:scale(.88);opacity:.65;filter:brightness(.8);transition:transform .6s,opacity .6s,filter .6s}
+.card.slide:hover{transform:scale(.88) translateY(-2px)}
+.card.slide.on{transform:scale(1);opacity:1;filter:none}
+.card.slide.on:hover{transform:scale(1) translateY(-2px)}
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 10px;border-radius:6px;background:rgba(var(--ar),.12);color:var(--a);border:1px solid rgba(var(--ar),.3)}
+.row{background:rgba(15,23,42,.6);border:1px solid #1e293b;border-radius:.75rem}
+.nb{padding:.4rem .9rem;border-radius:.5rem;color:#cbd5e1;border:1px solid transparent;white-space:nowrap;transition:.2s}
+.nb:hover{color:#fff;background:rgba(30,41,59,.5)}
+.nb.active{color:var(--a);background:rgba(var(--ar),.12);border-color:rgba(var(--ar),.3)}
+.ns::-webkit-scrollbar{display:none}.ns{scrollbar-width:none}
+::selection{background:var(--a);color:#06090e}
+#bgv{position:fixed;top:50%;left:50%;min-width:100%;min-height:100%;z-index:-3;transform:translate(-50%,-50%) scale(1.08);object-fit:cover;opacity:.6;filter:blur(3px) saturate(1.1)}
+#shade{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(circle at 50% 30%,rgba(var(--ar),.12),transparent 70%),linear-gradient(rgba(6,9,14,.22),rgba(6,9,14,.5))}
+#start{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;cursor:pointer;background:rgba(3,6,12,.5);backdrop-filter:blur(3px);transition:opacity .6s,transform .6s}
+#start.gone{opacity:0;transform:translateY(-16px);pointer-events:none}
+#start span{font-weight:600;font-size:1.4rem;animation:br 2.6s ease-in-out infinite}
+@keyframes br{50%{opacity:.5}}
+header,main,footer{opacity:0;transform:translateY(30px);transition:opacity .8s,transform .8s}
+body.in header,body.in main,body.in footer{opacity:1;transform:none}
+.mq{overflow:hidden;white-space:nowrap}.mt{display:inline-flex;will-change:transform}
+.mt.run{animation:mv linear infinite}@keyframes mv{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body class="min-h-screen flex flex-col">
+<div id="start" role="button" tabindex="0"><span>click to enter...</span></div>
+<video id="bgv" autoplay loop muted playsinline><source src="./assets/rimuru-bg.mp4" type="video/mp4"></video>
+<div id="shade"></div>
+
+<header class="sticky top-0 z-50 px-4 py-3 glass border-b border-slate-800/80">
+ <div class="max-w-7xl mx-auto flex items-center justify-between gap-3 flex-wrap lg:flex-nowrap">
+  <a href="https://discord.com/users/1450827820518604885" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 shrink-0">
+   <img id="logo" alt="Thuthurdcn" class="w-10 h-10 rounded-full object-cover border-2 border-sky-400/60 bg-slate-800" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='12' fill='%2338bdf8'/%3E%3C/svg%3E">
+   <div><div class="flex items-center gap-2"><span class="font-extrabold text-lg text-white">Thuthurdcn</span><span class="badge">SERVER MGT & QA</span></div>
+   <p class="text-xs text-slate-400">Server Creator • Moderator • QA Manager</p></div>
+  </a>
+  <nav id="nav" class="flex items-center gap-1 overflow-x-auto ns text-xs font-semibold uppercase tracking-wider bg-slate-900/40 px-2 py-1.5 rounded-xl border border-slate-800/60 order-3 lg:order-none w-full lg:w-auto"></nav>
+  <div class="flex items-center gap-2.5 bg-slate-900/90 p-1.5 rounded-xl border border-slate-800 relative shrink-0">
+   <button id="mbtn" aria-label="Play or pause music" title="Toggle Music" class="w-8 h-8 rounded-lg bg-sky-500/20 acc flex items-center justify-center hover:bg-sky-500/30 transition"><i id="mi" class="fas fa-play"></i></button>
+   <div class="flex flex-col pr-1 w-28"><span id="trk" class="text-[10px] acc font-mono font-medium truncate">Your Last Chance</span></div>
+   <div class="relative flex items-center pl-1 border-l border-slate-700/80">
+    <button id="vbtn" aria-label="Volume" title="Volume" class="w-7 h-7 rounded-lg text-slate-400 hover:text-sky-300 hover:bg-slate-800 flex items-center justify-center transition"><i class="fas fa-volume-up text-xs"></i></button>
+    <div id="vpop" class="absolute right-0 top-10 bg-slate-900/95 backdrop-blur-md border border-slate-700/80 p-2.5 rounded-xl shadow-xl z-50 flex items-center gap-2 opacity-0 scale-95 pointer-events-none transition-all duration-300 origin-top-right">
+     <i class="fas fa-volume-down text-[10px] text-slate-400"></i><input type="range" id="vol" aria-label="Volume" min="0" max="1" step="0.05" value="0.3" class="w-20 h-1 accent-sky-400"><i class="fas fa-volume-up text-[10px] text-slate-400"></i>
+    </div>
+   </div>
+  </div>
+ </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full">
+ <section id="s-home" class="space-y-10">
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-center">
+   <div class="card p-4"><div class="text-2xl font-extrabold acc">12+</div><div class="text-xs text-slate-400 uppercase mt-1">Servers Contributed</div></div>
+   <div class="card p-4"><div class="text-2xl font-extrabold sec">6+</div><div class="text-xs text-slate-400 uppercase mt-1">Servers Created</div></div>
+   <div class="card p-4 col-span-2 md:col-span-1"><div class="text-2xl font-extrabold text-pink-400">4+</div><div class="text-xs text-slate-400 uppercase mt-1">Types of Servers Created</div></div>
+  </div>
+  <div class="glass rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6" style="border-color:rgba(var(--ar),.3)">
+   <div class="space-y-3 max-w-2xl">
+    <div class="flex items-center gap-2"><span class="badge">IN DEVELOPMENT</span><span class="text-xs text-slate-400"><i class="fas fa-robot acc mr-1"></i>Helping a friend</span></div>
+    <h1 class="text-2xl md:text-4xl font-extrabold text-white">Helping with the Creation of an <span class="acc">All-In-One Bot</span></h1>
+    <p class="text-sm text-slate-300 leading-relaxed">Helping a friend create an all-in-one Discord bot, made to log, moderate, and offer some other useful features.</p>
+   </div>
+   <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+    <button onclick="go('servers')" class="px-6 py-3 rounded-xl accbg text-slate-950 font-bold text-xs uppercase tracking-wider text-center">Explore Servers</button>
+    <a href="https://discord.com/users/1450827820518604885" target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded-xl card text-white font-bold text-xs uppercase tracking-wider text-center">DM For More Information</a>
+   </div>
+  </div>
+  <div class="space-y-4">
+   <div class="flex items-center justify-between">
+    <div><h2 class="text-xl font-bold text-white"><i class="fas fa-server acc mr-2"></i>Servers Where I Am Contributing</h2><p class="text-xs text-slate-400">Communities, games and portfolios I help run</p></div>
+    <div class="flex gap-2"><button aria-label="Previous" onclick="scrollP(-1)" class="w-8 h-8 rounded-lg card"><i class="fas fa-chevron-left"></i></button><button aria-label="Next" onclick="scrollP(1)" class="w-8 h-8 rounded-lg card"><i class="fas fa-chevron-right"></i></button></div>
+   </div>
+   <div id="car" class="flex gap-6 overflow-x-auto py-6 px-4 snap-x ns items-center scroll-smooth"></div>
+  </div>
+ </section>
+
+ <section id="s-servers" class="hidden space-y-6"><div class="border-b border-slate-800 pb-4"><h2 class="text-2xl font-bold text-white"><i class="fas fa-server acc mr-2"></i>Servers</h2><p class="text-xs text-slate-400">How I build and run communities.</p></div><div id="g-servers" class="grid md:grid-cols-2 gap-6"></div></section>
+ <section id="s-qa" class="hidden space-y-6"><div class="border-b border-slate-800 pb-4"><h2 class="text-2xl font-bold text-white"><i class="fas fa-microscope acc mr-2"></i>Quality Assurance</h2><p class="text-xs text-slate-400">Testing, balancing and planning for games.</p></div><div id="g-qa" class="grid md:grid-cols-3 gap-6"></div></section>
+ <section id="s-leadership" class="hidden space-y-6"><div class="border-b border-slate-800 pb-4"><h2 class="text-2xl font-bold text-white"><i class="fas fa-crown acc mr-2"></i>Leadership</h2><p class="text-xs text-slate-400">How I guide and look after a team.</p></div><div id="g-lead" class="grid md:grid-cols-2 gap-6"></div></section>
+
+ <section id="s-about" class="hidden space-y-8">
+  <div class="border-b border-slate-800 pb-4"><h2 class="text-2xl font-bold text-white"><i class="fas fa-user-circle acc mr-2"></i>About Me</h2><p class="text-xs text-slate-400">Get to know more about my background and experience.</p></div>
+  <div class="card overflow-hidden relative" style="min-height:130px">
+   <div id="d-bg" class="absolute inset-0 bg-cover bg-center" style="filter:blur(22px) brightness(.45);transform:scale(1.3)"></div>
+   <div class="relative flex items-center gap-4 p-5">
+    <div class="relative shrink-0"><img id="d-av" alt="" class="w-16 h-16 rounded-full border-2 border-white/20 object-cover bg-slate-800"><span id="d-dot" class="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-slate-500" style="box-shadow:0 0 0 2px #0a0d14"></span></div>
+    <div class="min-w-0 flex-1">
+     <div class="flex items-center gap-2 flex-wrap"><span id="d-name" class="font-extrabold text-white text-lg">Loading...</span><span id="d-lab" class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-slate-700 text-slate-300">—</span></div>
+     <span id="d-user" class="text-xs text-slate-300 font-mono block">@—</span>
+     <div id="d-mq" class="hidden mt-2 mq rounded-lg bg-black/30 border border-white/10 px-2 py-1"><div id="d-mt" class="mt"><span id="d-txt" class="text-xs text-slate-200 pr-10">Fetching live status…</span></div></div>
+    </div>
+   </div>
+  </div>
+  <div class="grid md:grid-cols-3 gap-6">
+   <div class="card p-6 md:col-span-2 space-y-3"><h3 class="text-lg font-bold text-white">Profile Overview</h3><div id="g-prof" class="space-y-3"></div></div>
+   <div class="card p-5 space-y-3"><h3 class="text-xs font-bold text-white uppercase tracking-wider">Experience As</h3><div id="g-roles" class="flex flex-col gap-2"></div></div>
+  </div>
+  <div class="card p-5 flex flex-col sm:flex-row items-center gap-4" style="border-color:rgba(var(--ar),.35)">
+   <div class="flex items-center gap-4 flex-1 min-w-0">
+    <div class="relative shrink-0"><img id="c-av" alt="Nene" class="w-14 h-14 rounded-full border-2 border-white/20 object-cover bg-slate-800"><span id="c-dot" class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-slate-500" style="box-shadow:0 0 0 2px #0a0d14"></span></div>
+    <div class="min-w-0"><div class="text-[10px] uppercase tracking-wider text-slate-400">Made by</div><div id="c-name" class="font-extrabold text-white text-lg">Nene</div><div class="text-xs text-slate-400">Bot Developer • Server Manager • Moderator</div></div>
+   </div>
+   <div class="flex flex-wrap justify-center gap-2 text-xs font-bold">
+    <a href="https://discord.com/users/813355382960553994" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-300"><i class="fab fa-discord mr-1.5"></i>Discord Profile</a>
+    <a href="https://discord.gg/uXcsxvMVdr" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-lg bg-sky-500/10 border border-sky-500/20 acc"><i class="fas fa-server mr-1.5"></i>Portfolio Server</a>
+    <a href="https://guns.lol/ms.nene" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-lg bg-purple-500/10 border border-purple-500/20 text-purple-300"><i class="fas fa-crosshairs mr-1.5"></i>Guns.lol Profile</a>
+   </div>
+  </div>
+ </section>
+</main>
+
+<footer class="border-t border-slate-800/80 glass py-6 px-4 mt-12 text-xs text-slate-500">
+ <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+  <div><span class="font-bold text-slate-300">Thuthurdcn</span> • Server Creator & QA</div>
+  <a href="https://discord.com/users/813355382960553994" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-white">Made by <span class="acc font-bold">Nene</span></a>
+ </div>
+</footer>
+
+<audio id="aud" preload="auto" loop><source src="./assets/theme.mp3" type="audio/mpeg"></audio>
+
+<script>
+const FRIEND='1450827820518604885', NENE='813355382960553994';
+const $=id=>document.getElementById(id);
+const NAV=[['home','Home'],['servers','Servers'],['qa','QA'],['leadership','Leadership'],['about','About']];
+const SRV=[
+['Hek\'s Community','YouTuber\'s community','fab fa-youtube','from-red-500 to-rose-600','A server for a YouTube channel that lets the YouTuber talk to viewers more easily. I created the whole server except the roles.',['Server Creator']],
+['Sora Piece','Released game','fas fa-ship','from-blue-600 to-indigo-500','A Piece game where I am Senior Moderator, Lead Helper and QA Manager.',['Senior Moderator','Lead Helper','QA Manager']],
+['Rogue Zenith','Community server','fas fa-users','from-emerald-500 to-teal-500','A friendly community where I am Assistant Manager. I help a lot with the changes.',['Assistant Manager']],
+['Lordyy\'s Portfolio','Portfolio server','fas fa-briefcase','from-amber-500 to-orange-500','The portfolio of an owner of Monarch Studios, who is currently creating a game. I created the server.',['Server Creator']],
+['Rogue Requiem','Unreleased game','fas fa-skull','from-purple-600 to-pink-500','A game currently being created. I am a moderator.',['Moderator']],
+['RFX','Guild server','fas fa-flag','from-cyan-500 to-sky-400','A server for an in-game guild that exists across multiple games. I am a Senior Moderator.',['Senior Moderator']]];
+const SERV=[['fa-hammer','Server Creation','I am a server creator who can work even with little knowledge of what the owner wants, since I add things as they ask and remove others. I also have a friend who creates servers too.'],
+['fa-user-shield','Server Management','I always let the owner have the final say, since it is their server. Even when a lot of people break rules or say I am doing the wrong thing, I keep the rules in mind and make others follow them. I always think about what would be best for the servers.']];
+const QA=[['fa-bug','Testing','I always test when I am available, and when I test, I test everything. It is rare for a big bug to stay unknown after I test.'],
+['fa-scale-balanced','Balancing','I know the right amount of difficulty a player needs to be happy while playing a game, which is why I am a good balancer.'],
+['fa-clipboard-list','Planning','I can make detailed plans that cover whole updates and combine multiple normal suggestions into even better ones.']];
+const LEAD=[['fa-list-check','Essentials','I always inform the team of the different rules, and I know when a rule is broken or not. I always do what is needed for the server to be peaceful, even if it makes people upset with me.'],
+['fa-mug-hot','Respect','I also let the team rest, and I make them take breaks from time to time so they have time for real life, which matters most.']];
+const PROF=[['fa-hand-holding-heart','Always help when people need help','When I am available, I always respond as fast as possible to someone\'s message.'],
+['fa-handshake','Respect others','I respect others as much as they respect me, which means that even if I am friendly and I joke, I always respect people who respect me.'],
+['fa-seedling','Always think about the future of the server','I always put top priority on the future of the server. Even if it is a bad server, I will try my best to make it grow.']];
+const ROLES=[['Moderator','fa-shield-halved'],['Server Manager','fa-server'],['Server Creator','fa-hammer'],['Helper','fa-hand-holding-heart'],['Helper Manager','fa-people-group'],['Tester','fa-bug'],['Balancer','fa-scale-balanced'],['Planner','fa-clipboard-list'],['QA Manager','fa-microscope'],['Event Host','fa-microphone']];
+const info=a=>`<div class="card p-6 space-y-2"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-sky-500/20 acc flex items-center justify-center"><i class="fas ${a[0]}"></i></div><h3 class="font-bold text-white">${a[1]}</h3></div><p class="text-sm text-slate-300 leading-relaxed">${a[2]}</p></div>`;
+$('g-servers').innerHTML=SERV.map(info).join('');$('g-qa').innerHTML=QA.map(info).join('');$('g-lead').innerHTML=LEAD.map(info).join('');
+$('g-prof').innerHTML=PROF.map(p=>`<div class="row flex items-start gap-3 p-3 text-xs text-slate-300"><i class="fas ${p[0]} acc text-base mt-0.5"></i><div><strong class="text-white">${p[1]}:</strong> ${p[2]}</div></div>`).join('');
+$('g-roles').innerHTML=ROLES.map((r,i)=>`<div class="flex items-center gap-3 px-3 py-2 rounded-lg row text-xs"><i class="fas ${r[1]} w-4 text-center ${i%2?'sec':'acc'}"></i><span class="font-bold text-white">${r[0]}</span></div>`).join('');
+$('nav').innerHTML=NAV.map(n=>`<button id="n-${n[0]}" onclick="go('${n[0]}')" class="nb">${n[1]}</button>`).join('');
+const slide=s=>`<div class="card slide min-w-[280px] max-w-[280px] md:min-w-[320px] p-5 flex flex-col justify-between snap-center"><div><span class="badge">${s[1]}</span><div class="w-12 h-12 my-3 rounded-xl bg-gradient-to-tr ${s[3]} flex items-center justify-center text-white text-xl"><i class="${s[2]}"></i></div><h3 class="font-bold text-lg text-white">${s[0]}</h3><p class="text-xs text-slate-400 mt-1">${s[4]}</p></div><div class="mt-4 pt-3 border-t border-slate-800/80 flex flex-wrap gap-1 text-[10px]">${s[5].map(r=>`<span class="px-2 py-0.5 rounded bg-slate-800/80 acc">${r}</span>`).join('')}</div></div>`;
+const car=$('car');car.innerHTML=SRV.map(slide).join('');
+
+function go(id){NAV.forEach(n=>{$('s-'+n[0]).classList.toggle('hidden',n[0]!==id);$('n-'+n[0]).classList.toggle('active',n[0]===id)});window.scrollTo({top:0,behavior:'smooth'});
+ if(id==='about')requestAnimationFrame(()=>marquee(lastTxt,true));
+ if(id==='home')requestAnimationFrame(()=>{measure();if(car.scrollLeft<cw)jump(cw*n0)})}
+go('home');
+
+let cw=0,n0=SRV.length,busy=false,timer;
+const jump=x=>{car.classList.remove('scroll-smooth');car.scrollLeft=x;setTimeout(()=>car.classList.add('scroll-smooth'),50)};
+const measure=()=>{cw=car.children[0].offsetWidth+(parseFloat(getComputedStyle(car).columnGap)||24)};
+function scrollP(d){if(cw)car.scrollBy({left:d*cw,behavior:'smooth'})}
+function focusCar(){if(busy||!cw)return;const mid=car.getBoundingClientRect().left+car.clientWidth/2;
+ [...car.children].forEach(c=>{const r=c.getBoundingClientRect();c.classList.toggle('on',Math.abs(mid-(r.left+r.width/2))<r.width*.6)});
+ const set=cw*n0;if(car.scrollLeft<=cw||car.scrollLeft>=car.scrollWidth-car.clientWidth-cw){busy=true;jump(car.scrollLeft<=cw?car.scrollLeft+set:car.scrollLeft-set);setTimeout(()=>busy=false,60)}}
+const orig=[...car.children];orig.forEach(i=>car.appendChild(i.cloneNode(true)));orig.slice().reverse().forEach(i=>car.insertBefore(i.cloneNode(true),car.firstChild));
+setTimeout(()=>{measure();jump(cw*n0);setTimeout(()=>{focusCar();loop()},60)},100);
+const loop=()=>{clearInterval(timer);if(!matchMedia('(prefers-reduced-motion:reduce)').matches)timer=setInterval(()=>{if(!busy&&!document.hidden&&!$('s-home').classList.contains('hidden'))scrollP(1)},2500)};
+car.addEventListener('scroll',()=>requestAnimationFrame(focusCar));
+['mouseenter','touchstart'].forEach(e=>car.addEventListener(e,()=>clearInterval(timer),{passive:true}));
+['mouseleave','touchend'].forEach(e=>car.addEventListener(e,loop));
+addEventListener('resize',()=>{if(car.children.length)measure()});
+
+/* ---- Discord presence (Lanyard) ---- */
+const ST={online:['Online','#23a55a'],idle:['Idle','#f0b232'],dnd:['Do Not Disturb','#f23f43'],offline:['Offline','#80848e']};
+let lastTxt='';
+function marquee(t,force){const tr=$('d-mt'),sp=$('d-txt');$('d-mq').classList.toggle('hidden',!t);lastTxt=t;if(!t)return;if(!force&&t===sp.textContent&&tr.dataset.k===t)return;lastTxt=t;sp.textContent=t;tr.dataset.k=t;
+ tr.classList.remove('run');tr.querySelectorAll('.cl').forEach(e=>e.remove());
+ requestAnimationFrame(()=>{const w=tr.parentElement.clientWidth;if(w&&sp.scrollWidth>w){const c=sp.cloneNode(true);c.removeAttribute('id');c.className+=' cl';tr.appendChild(c);tr.style.animationDuration=Math.max(8,sp.scrollWidth/35)+'s';tr.classList.add('run')}})}
+async function lanyard(id){const j=await(await fetch('https://api.lanyard.rest/v1/users/'+id)).json();if(!j.success)throw 0;return j.data}
+const av=u=>u.avatar?`https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png?size=128`:'https://cdn.discordapp.com/embed/avatars/0.png';
+async function loadFriend(){try{const d=await lanyard(FRIEND),u=d.discord_user,a=av(u),m=ST[d.discord_status]||ST.offline;
+ $('d-av').src=a;$('logo').src=a;$('fav').href=a;$('d-bg').style.backgroundImage=`url('${a}')`;
+ $('d-name').textContent=u.global_name||u.username;$('d-user').textContent='@'+u.username;$('d-dot').style.background=m[1];
+ const l=$('d-lab');l.textContent=m[0];l.style.cssText=`background:${m[1]}33;color:${m[1]};border:1px solid ${m[1]}88`;
+ const cs=(d.activities||[]).find(x=>x.type===4);marquee(cs&&cs.state?cs.state:'')}
+ catch(e){$('d-name').textContent='Status unavailable';$('d-user').textContent='';marquee('')}}
+async function loadNene(){try{const d=await lanyard(NENE),u=d.discord_user;$('c-av').src=av(u);$('c-name').textContent=u.global_name||u.username;$('c-dot').style.background=(ST[d.discord_status]||ST.offline)[1]}catch(e){}}
+const refresh=()=>{if(!document.hidden){loadFriend();loadNene()}};refresh();setInterval(refresh,30000);
+
+/* ---- Music (mp3) ---- */
+const aud=$('aud'),vp=$('vpop');let playing=false,volOpen=false;aud.volume=$('vol').value;
+const icon=()=>$('mi').className=playing?'fas fa-pause animate-pulse':'fas fa-play';
+const play=()=>aud.play().then(()=>{playing=true;icon()}).catch(e=>console.log('Audio play prevented by browser policy',e));
+function toggle(){if(playing){aud.pause();playing=false;icon()}else play()}
+$('mbtn').onclick=toggle;$('vol').oninput=e=>aud.volume=e.target.value;
+function vpop(o){volOpen=o;vp.classList.toggle('opacity-0',!o);vp.classList.toggle('scale-95',!o);vp.classList.toggle('pointer-events-none',!o);vp.classList.toggle('opacity-100',o);vp.classList.toggle('scale-100',o)}
+$('vbtn').onclick=e=>{e.stopPropagation();vpop(!volOpen)};
+addEventListener('click',e=>{if(volOpen&&!vp.contains(e.target))vpop(false)});
+
+/* ---- Start overlay ---- */
+const start=()=>{$('start').classList.add('gone');setTimeout(()=>$('start').style.display='none',650);document.body.classList.add('in');$('bgv').play().catch(()=>{});aud.currentTime=0;play()};
+$('start').addEventListener('click',start,{once:true});
+$('start').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')start()},{once:true});
+</script>
+</body>
+</html>
